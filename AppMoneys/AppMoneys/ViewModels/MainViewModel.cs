@@ -54,10 +54,18 @@ namespace AppMoneys.ViewModels
 
         public Command SearchCommand { get; }
 
+        public Command AboutCommand { get; }
+
         public MainViewModel()
         {
             SearchCommand = new Command(ExecuteSearchCommand, CanExecuteSearchCommand);
+            AboutCommand = new Command(ExecuteAboutCommand);
             this.Results = new ObservableCollection<Tag>();
+        }
+
+        private async void ExecuteAboutCommand(object obj)
+        {
+            await PushAsync<AboutViewModel>();
         }
 
         async void ExecuteSearchCommand(object obj)
