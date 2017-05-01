@@ -1,18 +1,88 @@
-﻿namespace AppMoneys.ViewModels
+﻿using AppMoneys.Models;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using Xamarin.Forms;
+using System;
+using System.Collections.ObjectModel;
+
+namespace AppMoneys.ViewModels
 {
     public class MainViewModel: BaseViewModel
     {
-        private string _propriedadeTexto = "Texto Inicial";
+        private const string BaseUrl = "https://monkey-hub-api.azurewebsites.net/api/";
 
-        public string PropriedadeTexto
+        public async Task<List<Tag>> GetTagsAsync()
         {
-            get { return _propriedadeTexto; }
+            var httpClient = new HttpClient();
+
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var response = await httpClient.GetAsync($"{BaseUrl}Tags").ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                {
+                    return JsonConvert.DeserializeObject<List<Tag>>(
+                        await new StreamReader(responseStream)
+                        .ReadToEndAsync().ConfigureAwait(false));
+                }
+            }
+
+            return null;
+        }
+
+        private string _searchTerm = "Texto Inicial";
+
+        public string SearchTerm
+        {
+            get { return _searchTerm; }
             set
             {
-                _propriedadeTexto = value;
-                OnPropertyChanged();
+                if(SetPropery(ref _searchTerm, value))
+                {
+                    SearchCommand.ChangeCanExecute();
+                }
             }
         }
 
+        public ObservableCollection<Tag> Results { get; }
+
+        public Command SearchCommand { get; }
+
+        public MainViewModel()
+        {
+            SearchCommand = new Command(ExecuteSearchCommand, CanExecuteSearchCommand);
+            this.Results = new ObservableCollection<Tag>();
+        }
+
+        async void ExecuteSearchCommand(object obj)
+        {
+            bool resposta = await App.Current.MainPage.DisplayAlert("MonkeyHubApp", $"Você pesquisou por {this._searchTerm}", "Sim", "Não");
+
+            if (resposta)
+            {
+                Results.Clear();
+
+                var returnTags = await GetTagsAsync();
+
+                if (returnTags != null)
+                {
+                    foreach(var tag in returnTags)
+                    {
+                        Results.Add(tag);
+                    }
+                }
+            }
+        }
+
+        bool CanExecuteSearchCommand(object arg)
+        {
+            return !string.IsNullOrWhiteSpace(this._searchTerm);
+        }
     }
 }

@@ -4,9 +4,16 @@
              xmlns:local="clr-namespace:AppMoneys"
              x:Class="AppMoneys.MainPage">
 
-    <StackLayout VerticalOptions="Center">
-        <Editor Text="{Binding PropriedadeTexto}" />
-        <Label Text="{Binding PropriedadeTexto}" />
+    <StackLayout>
+        <Entry Text="{Binding SearchTerm}" />
+        <Button Text="Pesquisar" Command="{Binding SearchCommand}" />
+        <ListView ItemsSource="{Binding Results}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding Name}" Detail="{Binding Description}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </StackLayout>
 
 </ContentPage>

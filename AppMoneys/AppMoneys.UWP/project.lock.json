@@ -22272,16 +22272,16 @@
   },
   "project": {
     "restore": {
-      "projectUniqueName": "c:\\users\\breno\\documents\\visual studio 2017\\Projects\\AppMoneys\\AppMoneys\\AppMoneys.UWP\\AppMoneys.UWP.csproj",
+      "projectUniqueName": "D:\\Projetos\\Xamarin\\AppMonkeys\\AppMoneys\\AppMoneys.UWP\\AppMoneys.UWP.csproj",
       "projectName": "AppMoneys.UWP",
-      "projectPath": "c:\\users\\breno\\documents\\visual studio 2017\\Projects\\AppMoneys\\AppMoneys\\AppMoneys.UWP\\AppMoneys.UWP.csproj",
-      "projectJsonPath": "c:\\users\\breno\\documents\\visual studio 2017\\Projects\\AppMoneys\\AppMoneys\\AppMoneys.UWP\\project.json",
+      "projectPath": "D:\\Projetos\\Xamarin\\AppMonkeys\\AppMoneys\\AppMoneys.UWP\\AppMoneys.UWP.csproj",
+      "projectJsonPath": "D:\\Projetos\\Xamarin\\AppMonkeys\\AppMoneys\\AppMoneys.UWP\\project.json",
       "projectStyle": "ProjectJson",
       "frameworks": {
         "uap10.0": {
           "projectReferences": {
-            "c:\\users\\breno\\documents\\visual studio 2017\\Projects\\AppMoneys\\AppMoneys\\AppMoneys\\AppMoneys.csproj": {
-              "projectPath": "c:\\users\\breno\\documents\\visual studio 2017\\Projects\\AppMoneys\\AppMoneys\\AppMoneys\\AppMoneys.csproj"
+            "D:\\Projetos\\Xamarin\\AppMonkeys\\AppMoneys\\AppMoneys\\AppMoneys.csproj": {
+              "projectPath": "D:\\Projetos\\Xamarin\\AppMonkeys\\AppMoneys\\AppMoneys\\AppMoneys.csproj"
             }
           }
         }
