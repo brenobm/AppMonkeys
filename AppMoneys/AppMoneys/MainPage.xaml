@@ -4,12 +4,13 @@
              xmlns:local="clr-namespace:AppMoneys"
              x:Class="AppMoneys.MainPage"
              Title="Página Inicial">
-
+    <ContentPage.ToolbarItems>
+        <Button Text="Sobre" Command="{Binding AboutCommand}" />
+    </ContentPage.ToolbarItems>
     <StackLayout>
-        <Button Text="Tela Sobre" Command="{Binding AboutCommand}" />
         <Entry Text="{Binding SearchTerm}" />
         <Button Text="Pesquisar" Command="{Binding SearchCommand}" />
-        <ListView ItemsSource="{Binding Results}">
+        <ListView ItemsSource="{Binding Results}" ItemSelected="ListView_ItemSelected">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextCell Text="{Binding Name}" Detail="{Binding Description}"/>

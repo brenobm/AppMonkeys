@@ -1,42 +1,22 @@
 ﻿using AppMoneys.Models;
+using AppMoneys.Services;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using System;
-using System.Collections.ObjectModel;
 
 namespace AppMoneys.ViewModels
 {
     public class MainViewModel: BaseViewModel
     {
-        private const string BaseUrl = "https://monkey-hub-api.azurewebsites.net/api/";
+        private string _searchTerm;
 
-        public async Task<List<Tag>> GetTagsAsync()
-        {
-            var httpClient = new HttpClient();
-
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            var response = await httpClient.GetAsync($"{BaseUrl}Tags").ConfigureAwait(false);
-
-            if (response.IsSuccessStatusCode)
-            {
-                using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
-                {
-                    return JsonConvert.DeserializeObject<List<Tag>>(
-                        await new StreamReader(responseStream)
-                        .ReadToEndAsync().ConfigureAwait(false));
-                }
-            }
-
-            return null;
-        }
-
-        private string _searchTerm = "Texto Inicial";
+        private readonly IMonkeyHubApiService _mokeyHubApiService;
 
         public string SearchTerm
         {
@@ -56,11 +36,20 @@ namespace AppMoneys.ViewModels
 
         public Command AboutCommand { get; }
 
-        public MainViewModel()
+        public Command ShowCategoriaCommand { get; }
+
+        public MainViewModel(IMonkeyHubApiService mokeyHubApiService)
         {
             SearchCommand = new Command(ExecuteSearchCommand, CanExecuteSearchCommand);
             AboutCommand = new Command(ExecuteAboutCommand);
+            ShowCategoriaCommand = new Command<Tag>(ExecuteShowCategoriaCommand);
             this.Results = new ObservableCollection<Tag>();
+            this._mokeyHubApiService = mokeyHubApiService;
+        }
+
+        private async void ExecuteShowCategoriaCommand(Tag tag)
+        {
+            await PushAsync<CategoriaViewModel>(_mokeyHubApiService, tag);
         }
 
         private async void ExecuteAboutCommand(object obj)
@@ -76,7 +65,7 @@ namespace AppMoneys.ViewModels
             {
                 Results.Clear();
 
-                var returnTags = await GetTagsAsync();
+                var returnTags = await _mokeyHubApiService.GetTagsAsync();
 
                 if (returnTags != null)
                 {
