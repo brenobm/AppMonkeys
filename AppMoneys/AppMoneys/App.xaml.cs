@@ -8,7 +8,7 @@ namespace AppMoneys
         {
             InitializeComponent();
 
-            MainPage = new AppMoneys.MainPage();
+            MainPage = new NavigationPage(new AppMoneys.MainPage());
         }
 
         protected override void OnStart()

@@ -10,5 +10,15 @@ namespace AppMoneys
             InitializeComponent();
             BindingContext = new MainViewModel();
         }
+
+        private void ButtonNaoModal_Clicked(object sender, System.EventArgs e)
+        {
+            Navigation?.PushAsync(new MainPage());
+        }
+
+        private void ButtonModal_Clicked(object sender, System.EventArgs e)
+        {
+            Navigation?.PushModalAsync(new NavigationPage(new MainPage()));
+        }
     }
 }
