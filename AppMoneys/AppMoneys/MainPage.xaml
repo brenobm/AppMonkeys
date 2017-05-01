@@ -5,7 +5,7 @@
              x:Class="AppMoneys.MainPage"
              Title="Página Inicial">
     <ContentPage.ToolbarItems>
-        <Button Text="Sobre" Command="{Binding AboutCommand}" />
+        <ToolbarItem Text="Sobre" Command="{Binding AboutCommand}" />
     </ContentPage.ToolbarItems>
     <StackLayout>
         <Entry Text="{Binding SearchTerm}" />

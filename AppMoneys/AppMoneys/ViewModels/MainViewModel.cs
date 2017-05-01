@@ -40,11 +40,11 @@ namespace AppMoneys.ViewModels
 
         public MainViewModel(IMonkeyHubApiService mokeyHubApiService)
         {
+            this.Results = new ObservableCollection<Tag>();
+            this._mokeyHubApiService = mokeyHubApiService;
             SearchCommand = new Command(ExecuteSearchCommand, CanExecuteSearchCommand);
             AboutCommand = new Command(ExecuteAboutCommand);
             ShowCategoriaCommand = new Command<Tag>(ExecuteShowCategoriaCommand);
-            this.Results = new ObservableCollection<Tag>();
-            this._mokeyHubApiService = mokeyHubApiService;
         }
 
         private async void ExecuteShowCategoriaCommand(Tag tag)

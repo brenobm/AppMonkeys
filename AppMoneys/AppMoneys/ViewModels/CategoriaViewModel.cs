@@ -30,7 +30,7 @@ namespace AppMoneys.ViewModels
 
         private async void ExecuteShowContentCommand(Content content)
         {
-            //await PushAsync<ContentWebViewModel>(content);
+            await PushAsync<ContentWebViewModel>(content);
         }
 
         public async Task LoadAsync()
