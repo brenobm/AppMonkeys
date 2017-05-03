@@ -7,16 +7,21 @@ namespace AppMoneys
 {
     public partial class MainPage : ContentPage
     {
+        private MainViewModel ViewModel => BindingContext as MainViewModel;
         public MainPage()
         {
             InitializeComponent();
-            BindingContext = new MainViewModel(new MonkeyHubApiService());
+            var monkeyHubApiService = DependencyService.Get<IMonkeyHubApiService>();
+
+            BindingContext = new MainViewModel(monkeyHubApiService);
         }
 
-        private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        protected override async void OnAppearing()
         {
-            var tag = (sender as ListView)?.SelectedItem as Tag;
-            (BindingContext as MainViewModel)?.ShowCategoriaCommand.Execute(tag);
+            base.OnAppearing();
+
+            if (ViewModel != null)
+                await ViewModel.LoadAsync();
         }
     }
 }

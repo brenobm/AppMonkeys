@@ -33,7 +33,7 @@ namespace AppMoneys.ViewModels
             await PushAsync<ContentWebViewModel>(content);
         }
 
-        public async Task LoadAsync()
+        public override async Task LoadAsync()
         {
             var contents = await _mokeyHubApiService.GetContentsByTagIdAsync(_tag.Id);
 

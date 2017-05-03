@@ -14,25 +14,9 @@ namespace AppMoneys.ViewModels
 {
     public class MainViewModel: BaseViewModel
     {
-        private string _searchTerm;
-
         private readonly IMonkeyHubApiService _mokeyHubApiService;
 
-        public string SearchTerm
-        {
-            get { return _searchTerm; }
-            set
-            {
-                if(SetPropery(ref _searchTerm, value))
-                {
-                    SearchCommand.ChangeCanExecute();
-                }
-            }
-        }
-
-        public ObservableCollection<Tag> Results { get; }
-
-        public Command SearchCommand { get; }
+        public ObservableCollection<Tag> Tags { get; }
 
         public Command AboutCommand { get; }
 
@@ -40,9 +24,8 @@ namespace AppMoneys.ViewModels
 
         public MainViewModel(IMonkeyHubApiService mokeyHubApiService)
         {
-            this.Results = new ObservableCollection<Tag>();
+            this.Tags = new ObservableCollection<Tag>();
             this._mokeyHubApiService = mokeyHubApiService;
-            SearchCommand = new Command(ExecuteSearchCommand, CanExecuteSearchCommand);
             AboutCommand = new Command(ExecuteAboutCommand);
             ShowCategoriaCommand = new Command<Tag>(ExecuteShowCategoriaCommand);
         }
@@ -57,29 +40,19 @@ namespace AppMoneys.ViewModels
             await PushAsync<AboutViewModel>();
         }
 
-        async void ExecuteSearchCommand(object obj)
+        public override async Task LoadAsync()
         {
-            bool resposta = await App.Current.MainPage.DisplayAlert("MonkeyHubApp", $"Você pesquisou por {this._searchTerm}", "Sim", "Não");
+            var tags = await _mokeyHubApiService.GetTagsAsync();
 
-            if (resposta)
+            System.Diagnostics.Debug.WriteLine("FOUND {0} TAGS", tags.Count);
+            Tags.Clear();
+
+            foreach (var tag in tags)
             {
-                Results.Clear();
-
-                var returnTags = await _mokeyHubApiService.GetTagsAsync();
-
-                if (returnTags != null)
-                {
-                    foreach(var tag in returnTags)
-                    {
-                        Results.Add(tag);
-                    }
-                }
+                Tags.Add(tag);
             }
-        }
 
-        bool CanExecuteSearchCommand(object arg)
-        {
-            return !string.IsNullOrWhiteSpace(this._searchTerm);
+            OnPropertyChanged(nameof(Tags));
         }
     }
 }
